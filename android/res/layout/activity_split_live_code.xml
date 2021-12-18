@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    android:background="@color/ic_background_color"
+    android:theme="@style/ThemeOverlay.Connor.FullscreenContainer"
+    tools:context=".SplitLiveCodeActivity">
+
+    <LinearLayout
+        android:id="@+id/parentLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            android:orientation="vertical">
+
+            <com.github.ahmadaghazadeh.editor.widget.CodeEditor
+                android:id="@+id/codeMultiLineText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.05"
+                android:focusable="false"
+                bind:code=""
+                bind:isShowExtendedKeyboard="false"
+                bind:lang="javascript">
+
+            </com.github.ahmadaghazadeh.editor.widget.CodeEditor>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.95"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/testItButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:minHeight="32dp"
+                    android:text="Test it!" />
+
+                <Button
+                    android:id="@+id/refreshLogButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="Refresh log" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:orientation="vertical">
+
+            <FrameLayout
+                android:id="@+id/gameViewFrameLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.1">
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/errorLog"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.9"
+                android:background="@color/colorPrimaryDark"
+                android:duplicateParentState="false"
+                android:editable="false"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="none"
+                tools:ignore="SpeakableTextPresentCheck" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
