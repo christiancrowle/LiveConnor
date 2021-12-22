@@ -1,8 +1,5 @@
 package com.picsofbread.liveconnor.script;
 
-
-import org.mozilla.javascript.Context;
-
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;

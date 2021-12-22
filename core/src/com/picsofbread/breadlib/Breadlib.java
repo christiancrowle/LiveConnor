@@ -11,7 +11,6 @@ import com.picsofbread.breadlib.structs.Texture2D;
 import com.picsofbread.liveconnor.ILogCallbackProcessor;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 
 public class Breadlib {
 
