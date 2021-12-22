@@ -4,9 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.picsofbread.breadlib.Breadlib;
 import com.picsofbread.liveconnor.script.ScriptWrapper;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import javax.script.ScriptException;
 
 public class LiveConnor extends ApplicationAdapter {
@@ -52,14 +49,6 @@ public class LiveConnor extends ApplicationAdapter {
 		} catch (ScriptException e) {
 			// render function isn't declared yet. this is fine.
 			logCallback.logThis("no render function!");
-
-			StringWriter sw = new StringWriter();
-			PrintWriter pw = new PrintWriter(sw);
-			e.printStackTrace(pw);
-			String stackTrace = sw.toString();
-			if (stackTrace.contains("DrawTexture")) {
-				e.printStackTrace();
-			}
 		}
 	}
 	
