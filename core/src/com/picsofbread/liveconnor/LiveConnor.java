@@ -1,16 +1,17 @@
 package com.picsofbread.liveconnor;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextArea;
 import com.picsofbread.breadlib.Breadlib;
 import com.picsofbread.breadlib.structs.Texture2D;
 import com.picsofbread.liveconnor.script.ScriptWrapper;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
 
 import javax.script.ScriptException;
 
@@ -23,6 +24,7 @@ public class LiveConnor extends ApplicationAdapter {
 	VisTextArea textArea;
 	String code;
 	boolean codeIsDirty;
+	boolean shouldExecuteCode = false;
 
 	ScriptWrapper scriptingEngine;
 
@@ -42,11 +44,13 @@ public class LiveConnor extends ApplicationAdapter {
 		codeStage = new Stage(gameViewport);
 
 		breadlibInstance = new Breadlib(logCallback);
-		breadlibInstance.create();
+		breadlibInstance.Create();
 
 		scriptingEngine = new ScriptWrapper();
 		scriptingEngine.alias("badlogic_logo", img);
 		scriptingEngine.alias("bl", breadlibInstance);
+
+		codeHasChanged(""); // just so the code isn't null lmao
 	}
 
 	@Override
@@ -56,11 +60,29 @@ public class LiveConnor extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+		if (shouldExecuteCode) {
+			try {
+				scriptingEngine.runString(code);
+			} catch (ScriptException e) {
+				e.printStackTrace();
+			}
+			shouldExecuteCode = false; // definitely don't need to do this every frame
+		}
+
+		// now we'll run everything in draw()
 		try {
 			scriptingEngine.runString("draw();");
 		} catch (ScriptException e) {
 			// render function isn't declared yet. this is fine.
 			logCallback.logThis("no render function!");
+
+			StringWriter sw = new StringWriter();
+			PrintWriter pw = new PrintWriter(sw);
+			e.printStackTrace(pw);
+			String stackTrace = sw.toString();
+			if (stackTrace.contains("DrawTexture")) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -76,10 +98,6 @@ public class LiveConnor extends ApplicationAdapter {
 	}
 
 	public void executeCode() {
-		try {
-			scriptingEngine.runString(code);
-		} catch (ScriptException e) {
-			e.printStackTrace();
-		}
+		this.shouldExecuteCode = true;
 	}
 }
