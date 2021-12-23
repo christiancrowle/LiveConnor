@@ -1,17 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:bind="http://schemas.android.com/apk/res-auto"
     android:background="@color/ic_background_color"
+    android:orientation="vertical"
     android:theme="@style/ThemeOverlay.Connor.FullscreenContainer"
     tools:context=".SplitLiveCodeActivity">
+
+    <LinearLayout
+        android:id="@+id/toolbarContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="0.92">
+
+        <ImageButton
+            android:id="@+id/saveButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_file_save" />
+
+        <ImageButton
+            android:id="@+id/undoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_edit_undo" />
+
+        <ImageButton
+            android:id="@+id/redoButton"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_edit_redo" />
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/parentLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="0.08"
+        android:baselineAligned="false"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -85,4 +116,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</FrameLayout>
+</LinearLayout>

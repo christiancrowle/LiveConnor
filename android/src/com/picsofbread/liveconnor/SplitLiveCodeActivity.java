@@ -6,22 +6,22 @@ import android.support.v7.app.ActionBar;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
+import com.github.ahmadaghazadeh.editor.processor.TextNotFoundException;
 import com.github.ahmadaghazadeh.editor.widget.CodeEditor;
+import com.picsofbread.liveconnor.state.States;
 
 import java.util.ArrayDeque;
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -127,7 +127,7 @@ public class SplitLiveCodeActivity extends AndroidApplication implements ILogCal
         // initialize the gdx view
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         liveConnorInstance = new LiveConnor();
-        liveConnorInstance.logCallback = this;
+        States.STATE_LIVE_CODE_MAIN.logCallback = this;
 
         View view = initializeForView(liveConnorInstance, config);
 
@@ -145,15 +145,33 @@ public class SplitLiveCodeActivity extends AndroidApplication implements ILogCal
 
         // NOTE: could use a binding for this, but for now we just dump the whole edittext's string into the codehaschanged func in LiveConnor
         //       -- means we can do processing on it after
-        editor.setOnTextChange(str -> liveConnorInstance.codeHasChanged(str));
+        editor.setOnTextChange(str -> States.STATE_LIVE_CODE_MAIN.codeHasChanged(str));
 
         Button testButton = findViewById(R.id.testItButton);
-        testButton.setOnClickListener(v -> liveConnorInstance.executeCode());
+        testButton.setOnClickListener(v -> States.STATE_LIVE_CODE_MAIN.executeCode());
 
         EditText errorLog = findViewById(R.id.errorLog);
 
         Button refreshLogButton = findViewById(R.id.refreshLogButton); // FIXME: make this not a button.
         refreshLogButton.setOnClickListener(v -> errorLog.setText(logToString()));
+
+        ImageButton undoButton = findViewById(R.id.undoButton);
+        undoButton.setOnClickListener(v -> {
+            try {
+                editor.undo();
+            } catch (TextNotFoundException e) {
+                // just ignore if there's no text
+            }
+        });
+
+        ImageButton redoButton = findViewById(R.id.redoButton);
+        redoButton.setOnClickListener(v -> {
+            try {
+                editor.redo();
+            } catch (TextNotFoundException e) {
+                // just ignore if there's no text
+            }
+        });
     }
 
     public String logToString() {

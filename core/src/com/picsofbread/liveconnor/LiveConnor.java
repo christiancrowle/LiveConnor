@@ -1,67 +1,37 @@
 package com.picsofbread.liveconnor;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.picsofbread.breadlib.Breadlib;
-import com.picsofbread.liveconnor.script.ScriptWrapper;
-
-import javax.script.ScriptException;
+import com.picsofbread.liveconnor.state.State;
+import com.picsofbread.liveconnor.state.States;
 
 public class LiveConnor extends ApplicationAdapter {
-	String code;
-	boolean codeIsDirty;
-	boolean shouldExecuteCode = false;
 
-	ScriptWrapper scriptingEngine;
+	private State currentState;
 
-	ILogCallbackProcessor logCallback;
+	public void changeState(State state) {
+		currentState = state;
 
-	Breadlib breadlibInstance;
+		if (!state.hasBeenCreated)
+			currentState.create();
+	}
 
 	@Override
-	public void create () {
-		breadlibInstance = new Breadlib(logCallback);
-		breadlibInstance.Create();
-
-		scriptingEngine = new ScriptWrapper();
-		scriptingEngine.alias("bl", breadlibInstance);
-
-		codeHasChanged(""); // just so the code isn't null lmao
+	public void create() {
+		changeState(States.STATE_LIVE_CODE_MAIN);
 	}
 
 	@Override
 	public void resize(int width, int height) {
+		currentState.resize(width, height);
 	}
 
 	@Override
-	public void render () {
-		if (shouldExecuteCode) {
-			try {
-				scriptingEngine.runString(code);
-			} catch (ScriptException e) {
-				e.printStackTrace();
-			}
-			shouldExecuteCode = false; // definitely don't need to do this every frame
-		}
-
-		// now we'll run everything in draw()
-		try {
-			scriptingEngine.runString("draw();");
-		} catch (ScriptException e) {
-			// render function isn't declared yet. this is fine.
-			logCallback.logThis("no render function!");
-		}
+	public void render() {
+		currentState.render();
 	}
 	
 	@Override
-	public void dispose () {
-	}
+	public void dispose() {
 
-	public void codeHasChanged(String code) {
-		this.code = code;
-		this.codeIsDirty = true;
-	}
-
-	public void executeCode() {
-		this.shouldExecuteCode = true;
 	}
 }
